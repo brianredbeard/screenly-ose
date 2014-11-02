@@ -151,6 +151,7 @@ def browser_send(command, cb=lambda _: True):
             browser.next()
 
         browser.process.stdin.put(command + '\n')
+        logging.debug("UZBL Command: %s", command)
         while True:  # loop until cb returns True
             if cb(browser.next()):
                 break
