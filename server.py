@@ -91,6 +91,7 @@ def template(template_name, **context):
     # Add global contexts
     context['up_to_date'] = is_up_to_date()
     context['default_duration'] = settings['default_duration']
+    context['use_24_hour_clock'] = settings['use_24_hour_clock']
 
     return haml_template(template_name, **context)
 
@@ -120,7 +121,7 @@ def prepare_asset(request):
             get('mimetype')]):
 
         asset = {
-            'name': get('name').decode('UTF-8'),
+            'name': get('name'),
             'mimetype': get('mimetype'),
             'asset_id': get('asset_id'),
             'is_enabled': get('is_enabled'),
@@ -163,7 +164,7 @@ def prepare_asset(request):
                         break
                     f.write(chunk)
 
-        if "video" in asset['mimetype'] and get('duration')=="0":
+        if "video" in asset['mimetype']:
             video_duration = get_video_duration(asset['uri'])
             if video_duration:
                 asset['duration'] = int(video_duration.total_seconds())
